@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--
+        Author: Frank Solomon
+        Date: 09/05/2026
+        Purpose: Create a portfolio homepage with a personalized welcome.
+    -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Frank Solomon's web development portfolio">
+    <title>Frank Solomon | Portfolio</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f2f2f2;
+            color: #222;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: #25465f;
+            color: white;
+            padding: 24px;
+            text-align: center;
+        }
+
+        nav {
+            background-color: #333;
+            padding: 12px;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            margin: 0 15px;
+        }
+
+        main {
+            max-width: 850px;
+            margin: 20px auto;
+            padding: 0 16px;
+        }
+
+        section {
+            background-color: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+        }
+
+        h2 {
+            color: #25465f;
+        }
+
+        .project {
+            margin-bottom: 25px;
+        }
+
+        .project img {
+            width: 260px;
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ccc;
+        }
+
+        label {
+            display: block;
+            margin-top: 12px;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            font: inherit;
+            border: 1px solid #777;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background-color: #25465f;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font: inherit;
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Frank Solomon's Portfolio</h1>
+        <p id="welcome">Welcome to my portfolio!</p>
+    </header>
+
+    <!-- Navigation links connect to the three main sections. -->
+    <nav aria-label="Main navigation">
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+    </nav>
+
+    <main>
+        <section id="about">
+            <h2>About</h2>
+            <p>
+                My name is Frank Solomon, and I am a student at ECPI
+                University studying web development. I have worked with
+                HTML, CSS, PHP, and MySQL in my coursework.
+            </p>
+            <p>
+                I am now learning JavaScript to make my webpages more
+                interactive. This portfolio shares some of my projects
+                as I continue developing my skills.
+            </p>
+        </section>
+
+        <section id="projects">
+            <h2>Projects</h2>
+            <p>
+                Below are three projects from my coursework.
+                Click an image to view its GitHub repository.
+            </p>
+
+            <!-- Simple project label images link to each repository. -->
+            <article class="project">
+                <h3>Solomon Kitchen Supply</h3>
+                <a href="https://github.com/frasol2895/Solomon_SDC310_Store">
+                    <img
+                        src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='520' height='240'%3E%3Crect width='520' height='240' fill='%2325465f'/%3E%3Ctext x='260' y='130' text-anchor='middle' fill='white' font-family='Arial' font-size='30'%3EKitchen Supply%3C/text%3E%3C/svg%3E"
+                        alt="View Solomon Kitchen Supply on GitHub">
+                </a>
+                <p>
+                    A PHP and MySQL store project with a product catalog
+                    and shopping cart.
+                </p>
+            </article>
+
+            <article class="project">
+                <h3>PHP Database Application</h3>
+                <a href="https://github.com/frasol2895/Solomon_wk3pa">
+                    <img
+                        src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='520' height='240'%3E%3Crect width='520' height='240' fill='%233c6654'/%3E%3Ctext x='260' y='130' text-anchor='middle' fill='white' font-family='Arial' font-size='30'%3EDatabase Application%3C/text%3E%3C/svg%3E"
+                        alt="View my PHP database application on GitHub">
+                </a>
+                <p>
+                    A coursework project practicing interactions between
+                    a PHP application and a database.
+                </p>
+            </article>
+
+            <article class="project">
+                <h3>PHP MVC Application</h3>
+                <a href="https://github.com/frasol2895/Solomon_wk4pa">
+                    <img
+                        src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='520' height='240'%3E%3Crect width='520' height='240' fill='%23595175'/%3E%3Ctext x='260' y='130' text-anchor='middle' fill='white' font-family='Arial' font-size='30'%3EMVC Application%3C/text%3E%3C/svg%3E"
+                        alt="View my PHP MVC application on GitHub">
+                </a>
+                <p>
+                    A PHP project using the Model-View-Controller
+                    structure to organize application code.
+                </p>
+            </article>
+        </section>
+
+        <section id="contact">
+            <h2>Contact</h2>
+            <p>
+                Use the form below to enter your contact information
+                and a message. This practice form does not send email yet.
+            </p>
+
+            <form id="contactForm">
+                <label for="senderName">Sender Name</label>
+                <input type="text" id="senderName" name="senderName" required>
+
+                <label for="senderEmail">Email Address</label>
+                <input type="email" id="senderEmail" name="senderEmail" required>
+
+                <label for="subject">Subject</label>
+                <input type="text" id="subject" name="subject" required>
+
+                <label for="message">Message</label>
+                <textarea id="message" name="message" rows="5" required></textarea>
+
+                <button type="submit">Submit</button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Frank Solomon</p>
+    </footer>
+
+    <script>
+        // Ask for the visitor's name and store it in a variable.
+        var visitorName = prompt("What is your name?");
+
+        // Use a general greeting if the visitor cancels or enters no name.
+        if (visitorName !== null && visitorName.trim() !== "") {
+            document.getElementById("welcome").textContent =
+                "Welcome to my portfolio, " + visitorName.trim() + "!";
+        } else {
+            document.getElementById("welcome").textContent =
+                "Welcome to my portfolio, visitor!";
+        }
+
+        // Display feedback without sending data or reloading the page.
+        document.getElementById("contactForm").addEventListener(
+            "submit",
+            function (event) {
+                event.preventDefault();
+                alert("This is a practice contact form. No message was sent.");
+            }
+        );
+    </script>
+</body>
+</html>
