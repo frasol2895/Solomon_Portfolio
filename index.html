@@ -3,8 +3,10 @@
 <head>
     <!--
         Author: Frank Solomon
-        Date: 09/05/2026
-        Purpose: Create a portfolio homepage with a personalized welcome.
+        Date: 09/12/2026
+        Purpose: Expand my portfolio using JavaScript control flow.
+        Use conditional logic for featured content and a loop for skills.
+        Add a dark mode checkbox and personalized contact form feedback.
     -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,6 +36,7 @@
         }
 
         nav a {
+            display: inline-block;
             color: white;
             margin: 0 15px;
         }
@@ -55,11 +58,16 @@
             color: #25465f;
         }
 
+        a {
+            color: #25465f;
+        }
+
         .project {
             margin-bottom: 25px;
         }
 
-        .project img {
+        .project img,
+        .resource-box img {
             width: 260px;
             max-width: 100%;
             height: auto;
@@ -94,6 +102,73 @@
             text-align: center;
             padding: 15px;
         }
+
+        /* Keep the dark mode checkbox beside its label. */
+        .theme-control {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .theme-control input {
+            width: auto;
+        }
+
+        /* Make each featured resource group visually distinct. */
+        .resource-box {
+            padding: 16px;
+            margin-bottom: 16px;
+            border: 2px solid #25465f;
+            background-color: #eef5fb;
+        }
+
+        #personalProjects {
+            border-color: #3c6654;
+            background-color: #eff7f2;
+        }
+
+        /* Apply consistent colors when dark mode is enabled. */
+        body.dark-mode {
+            background-color: #121212;
+            color: #f2f2f2;
+        }
+
+        body.dark-mode header,
+        body.dark-mode nav {
+            background-color: #182b3a;
+        }
+
+        body.dark-mode section {
+            background-color: #222;
+            border-color: #666;
+        }
+
+        body.dark-mode h2,
+        body.dark-mode a {
+            color: #a9d6ff;
+        }
+
+        body.dark-mode .resource-box {
+            background-color: #293746;
+            border-color: #a9d6ff;
+        }
+
+        body.dark-mode #personalProjects {
+            background-color: #253a30;
+            border-color: #9cd6b1;
+        }
+
+        body.dark-mode input,
+        body.dark-mode textarea {
+            background-color: #333;
+            color: #fff;
+            border-color: #aaa;
+        }
+
+        body.dark-mode button {
+            background-color: #a9d6ff;
+            color: #121212;
+        }
     </style>
 </head>
 
@@ -101,11 +176,18 @@
     <header>
         <h1>Frank Solomon's Portfolio</h1>
         <p id="welcome">Welcome to my portfolio!</p>
+
+        <!-- The checkbox controls the page's color theme. -->
+        <label class="theme-control" for="darkMode">
+            <input type="checkbox" id="darkMode">
+            Dark Mode
+        </label>
     </header>
 
-    <!-- Navigation links connect to the three main sections. -->
+    <!-- Navigation links connect to the main sections. -->
     <nav aria-label="Main navigation">
         <a href="#about">About</a>
+        <a href="#featured">Featured Content</a>
         <a href="#projects">Projects</a>
         <a href="#contact">Contact</a>
     </nav>
@@ -123,6 +205,35 @@
                 interactive. This portfolio shares some of my projects
                 as I continue developing my skills.
             </p>
+
+            <h3>Skills and Technologies</h3>
+            <!-- JavaScript generates the list items using a loop. -->
+            <ul id="skillsList"></ul>
+        </section>
+
+        <section id="featured">
+            <h2>Featured Content</h2>
+
+            <!-- Visibility depends on the number of listed projects. -->
+            <div id="universityResources" class="resource-box">
+                <h3>University Resources</h3>
+                <p>
+                    Explore the program connected to my web development studies.
+                </p>
+                <a href="https://www.ecpi.edu/programs/ux-web-development-bachelor-degree">
+                    ECPI UX and Web Development Program
+                </a>
+            </div>
+
+            <div id="personalProjects" class="resource-box">
+                <h3>Personal Projects</h3>
+                <p>Click the image to explore my Kitchen Supply project.</p>
+                <a href="https://github.com/frasol2895/Solomon_SDC310_Store">
+                    <img
+                        src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='520' height='240'%3E%3Crect width='520' height='240' fill='%2325465f'/%3E%3Ctext x='260' y='130' text-anchor='middle' fill='white' font-family='Arial' font-size='30'%3EKitchen Supply%3C/text%3E%3C/svg%3E"
+                        alt="View Solomon Kitchen Supply on GitHub">
+                </a>
+            </div>
         </section>
 
         <section id="projects">
@@ -132,7 +243,7 @@
                 Click an image to view its GitHub repository.
             </p>
 
-            <!-- Simple project label images link to each repository. -->
+            <!-- Project label images link to each repository. -->
             <article class="project">
                 <h3>Solomon Kitchen Supply</h3>
                 <a href="https://github.com/frasol2895/Solomon_SDC310_Store">
@@ -193,7 +304,7 @@
                 <label for="message">Message</label>
                 <textarea id="message" name="message" rows="5" required></textarea>
 
-                <button type="submit">Submit</button>
+                <button type="submit" id="submitButton">Submit</button>
             </form>
         </section>
     </main>
@@ -203,10 +314,82 @@
     </footer>
 
     <script>
-        // Ask for the visitor's name and store it in a variable.
+        "use strict";
+
+        // Use a for loop to display the skills array as a bulleted list.
+        var skills = ["HTML", "CSS", "JavaScript", "PHP", "MySQL", "GitHub"];
+        var skillsList = document.getElementById("skillsList");
+
+        for (var i = 0; i < skills.length; i++) {
+            var skillItem = document.createElement("li");
+            skillItem.textContent = skills[i];
+            skillsList.appendChild(skillItem);
+        }
+
+        // Count only the project articles inside the Projects section.
+        var projectCount = document.querySelectorAll("#projects .project").length;
+        var universityResources = document.getElementById("universityResources");
+        var personalProjects = document.getElementById("personalProjects");
+
+        // Show both groups with fewer than three projects.
+        // With three or more projects, hide University Resources.
+        if (projectCount < 3) {
+            universityResources.hidden = false;
+            personalProjects.hidden = false;
+        } else {
+            universityResources.hidden = true;
+            personalProjects.hidden = false;
+        }
+
+        // Add or remove the dark mode class when the checkbox changes.
+        document.getElementById("darkMode").addEventListener(
+            "change",
+            function () {
+                if (this.checked) {
+                    document.body.classList.add("dark-mode");
+                } else {
+                    document.body.classList.remove("dark-mode");
+                }
+            }
+        );
+
+        // Select the form and its Submit button.
+        var contactForm = document.getElementById("contactForm");
+        var submitButton = document.getElementById("submitButton");
+
+        // Prevent the button from refreshing the page and show feedback.
+        submitButton.addEventListener("click", function (event) {
+            event.preventDefault();
+
+            // Validate required fields and the email address.
+            if (!contactForm.reportValidity()) {
+                return;
+            }
+
+            var senderName = document.getElementById("senderName").value.trim();
+
+            // Reject names containing only spaces.
+            if (senderName === "") {
+                alert("Please enter your name.");
+                document.getElementById("senderName").focus();
+                return;
+            }
+
+            alert(
+                "Thank you, " + senderName +
+                "! Your message has been received for this practice demonstration. " +
+                "No email was sent."
+            );
+        });
+
+        // Also prevent navigation if the form is submitted through the keyboard.
+        contactForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+        });
+
+        // Preserve the personalized welcome from the original portfolio.
         var visitorName = prompt("What is your name?");
 
-        // Use a general greeting if the visitor cancels or enters no name.
         if (visitorName !== null && visitorName.trim() !== "") {
             document.getElementById("welcome").textContent =
                 "Welcome to my portfolio, " + visitorName.trim() + "!";
@@ -214,15 +397,6 @@
             document.getElementById("welcome").textContent =
                 "Welcome to my portfolio, visitor!";
         }
-
-        // Display feedback without sending data or reloading the page.
-        document.getElementById("contactForm").addEventListener(
-            "submit",
-            function (event) {
-                event.preventDefault();
-                alert("This is a practice contact form. No message was sent.");
-            }
-        );
     </script>
 </body>
 </html>
