@@ -3,10 +3,10 @@
 <head>
     <!--
         Author: Frank Solomon
-        Date: 09/12/2026
-        Purpose: Expand my portfolio using JavaScript control flow.
+        Date: 09/19/2026
+        Purpose: Expand my portfolio using JavaScript DOM methods.
         Use conditional logic for featured content and a loop for skills.
-        Add a dark mode checkbox and personalized contact form feedback.
+        Create new content, update headings, and display timed form feedback.
     -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -96,6 +96,18 @@
             border: none;
             cursor: pointer;
             font: inherit;
+        }
+
+        /* Highlight dynamically added project and form messages. */
+        .project-update, .form-status {
+            padding: 12px;
+            border-left: 4px solid #3c6654;
+            font-weight: bold;
+        }
+
+        button:disabled {
+            opacity: 0.65;
+            cursor: wait;
         }
 
         footer {
@@ -306,6 +318,8 @@
 
                 <button type="submit" id="submitButton">Submit</button>
             </form>
+            <!-- Announce the dynamically created feedback to screen readers. -->
+            <div id="formFeedback" role="status" aria-live="polite"></div>
         </section>
     </main>
 
@@ -353,38 +367,60 @@
             }
         );
 
-        // Select the form and its Submit button.
+        // Week 3: Select and modify two existing section headings.
+        var aboutHeading = document.querySelector("#about h2");
+        aboutHeading.textContent = "About Me and My Skills";
+        var projectsHeading = document.querySelector("#projects h2");
+        projectsHeading.textContent = "My Web Development Projects";
+
+        // Week 3: Create a new paragraph and append it to Projects.
+        function addProjectUpdate() {
+            var projectUpdate = document.createElement("p");
+            projectUpdate.classList.add("project-update");
+            projectUpdate.textContent =
+                "Recent project: I am expanding this portfolio with JavaScript " +
+                "to create page elements, update content, and display timed form feedback.";
+            document.getElementById("projects").appendChild(projectUpdate);
+        }
+        addProjectUpdate();
+
+        // Handle both button clicks and keyboard submissions through the form.
         var contactForm = document.getElementById("contactForm");
         var submitButton = document.getElementById("submitButton");
+        var formFeedback = document.getElementById("formFeedback");
+        var isSending = false;
 
-        // Prevent the button from refreshing the page and show feedback.
-        submitButton.addEventListener("click", function (event) {
+        contactForm.addEventListener("submit", function (event) {
             event.preventDefault();
-
-            // Validate required fields and the email address.
-            if (!contactForm.reportValidity()) {
+            if (isSending || !contactForm.reportValidity()) {
                 return;
             }
 
             var senderName = document.getElementById("senderName").value.trim();
-
-            // Reject names containing only spaces.
             if (senderName === "") {
                 alert("Please enter your name.");
                 document.getElementById("senderName").focus();
                 return;
             }
 
-            alert(
-                "Thank you, " + senderName +
-                "! Your message has been received for this practice demonstration. " +
-                "No email was sent."
-            );
-        });
+            // Create loading feedback dynamically; clear any previous result.
+            formFeedback.textContent = "";
+            var statusMessage = document.createElement("p");
+            statusMessage.classList.add("form-status");
+            statusMessage.textContent = "Sending message...";
+            formFeedback.appendChild(statusMessage);
+            isSending = true;
+            submitButton.disabled = true;
 
-        // Also prevent navigation if the form is submitted through the keyboard.
-        contactForm.addEventListener("submit", function (event) {
-            event.preventDefault();
+            // Replace the loading text after 2.5 seconds (2500 milliseconds).
+            // This is a practice submission and does not send an actual email.
+            setTimeout(function () {
+                statusMessage.textContent = "Thank you, " + senderName +
+                    "! Your message was submitted successfully for this practice " +
+                    "demonstration. No email was sent.";
+                isSending = false;
+                submitButton.disabled = false;
+            }, 2500);
         });
 
         // Preserve the personalized welcome from the original portfolio.
