@@ -3,10 +3,10 @@
 <head>
     <!--
         Author: Frank Solomon
-        Date: 09/19/2026
-        Purpose: Expand my portfolio using JavaScript DOM methods.
+        Date: 09/26/2026
+        Purpose: Expand my portfolio with persistent storage and a welcome modal.
         Use conditional logic for featured content and a loop for skills.
-        Create new content, update headings, and display timed form feedback.
+        Display a welcome modal, a Submit tooltip, and remember the dark mode preference.
     -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -181,10 +181,61 @@
             background-color: #a9d6ff;
             color: #121212;
         }
+        /* Week 4: Custom modal with a translucent overlay. */
+        #welcomeModal {
+            max-width: 420px;
+            width: calc(100% - 80px);
+            padding: 24px;
+            border: none;
+            border-radius: 8px;
+            background-color: white;
+            color: #222;
+        }
+
+        #welcomeModal::backdrop {
+            background-color: rgba(0, 0, 0, 0.55);
+        }
+
+        body.dark-mode #welcomeModal {
+            background-color: #222;
+            color: #f2f2f2;
+        }
+
+        /* Show the Submit tooltip on mouse hover or keyboard focus. */
+        .submit-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .submit-tooltip {
+            visibility: hidden;
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            width: 205px;
+            padding: 8px;
+            border-radius: 5px;
+            background-color: #222;
+            color: white;
+            font-size: 14px;
+            text-align: center;
+            z-index: 1;
+        }
+
+        .submit-wrapper:hover .submit-tooltip,
+        .submit-wrapper:focus-within .submit-tooltip {
+            visibility: visible;
+        }
     </style>
 </head>
 
 <body>
+    <!-- Week 4: A native dialog provides modal focus and keyboard support. -->
+    <dialog id="welcomeModal" aria-labelledby="modalTitle" aria-describedby="modalMessage">
+        <h2 id="modalTitle">Welcome to My Portfolio!</h2>
+        <p id="modalMessage">This page is a work in progress.</p>
+        <button type="button" id="closeModal" autofocus>Close</button>
+    </dialog>
     <header>
         <h1>Frank Solomon's Portfolio</h1>
         <p id="welcome">Welcome to my portfolio!</p>
@@ -316,7 +367,10 @@
                 <label for="message">Message</label>
                 <textarea id="message" name="message" rows="5" required></textarea>
 
-                <button type="submit" id="submitButton">Submit</button>
+                <span class="submit-wrapper">
+                    <button type="submit" id="submitButton" aria-describedby="submitTooltip">Submit</button>
+                    <span id="submitTooltip" class="submit-tooltip" role="tooltip">Click to send your message!</span>
+                </span>
             </form>
             <!-- Announce the dynamically created feedback to screen readers. -->
             <div id="formFeedback" role="status" aria-live="polite"></div>
@@ -355,17 +409,26 @@
             personalProjects.hidden = false;
         }
 
-        // Add or remove the dark mode class when the checkbox changes.
-        document.getElementById("darkMode").addEventListener(
-            "change",
-            function () {
-                if (this.checked) {
-                    document.body.classList.add("dark-mode");
-                } else {
-                    document.body.classList.remove("dark-mode");
-                }
+        // Week 4: Restore the saved theme and match the checkbox on every load.
+        var darkModeToggle = document.getElementById("darkMode");
+        try {
+            darkModeToggle.checked = localStorage.getItem("darkMode") === "true";
+        } catch (error) {
+            // Keep the page usable if the browser blocks storage.
+            darkModeToggle.checked = false;
+        }
+        document.body.classList.toggle("dark-mode", darkModeToggle.checked);
+
+        // Save both enabled and disabled preferences across browser visits.
+        darkModeToggle.addEventListener("change", function () {
+            document.body.classList.toggle("dark-mode", this.checked);
+            try {
+                localStorage.setItem("darkMode", String(this.checked));
+            } catch (error) {
+                // The theme still changes when persistent storage is unavailable.
+                console.warn("The browser could not save your theme preference.");
             }
-        );
+        });
 
         // Week 3: Select and modify two existing section headings.
         var aboutHeading = document.querySelector("#about h2");
@@ -423,16 +486,13 @@
             }, 2500);
         });
 
-        // Preserve the personalized welcome from the original portfolio.
-        var visitorName = prompt("What is your name?");
-
-        if (visitorName !== null && visitorName.trim() !== "") {
-            document.getElementById("welcome").textContent =
-                "Welcome to my portfolio, " + visitorName.trim() + "!";
-        } else {
-            document.getElementById("welcome").textContent =
-                "Welcome to my portfolio, visitor!";
-        }
+        // Week 4: Replace the name prompt with a welcome modal on every load.
+        var welcomeModal = document.getElementById("welcomeModal");
+        document.getElementById("closeModal").addEventListener("click", function () {
+            welcomeModal.close();
+            darkModeToggle.focus();
+        });
+        welcomeModal.showModal();
     </script>
 </body>
 </html>
